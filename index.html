@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+    <title>小满练习题一年级数学</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <style>
+        body {
+            font-family: Monospace;
+            margin: 0px;
+           
+            color:#555;
+        }
+        .list{
+            list-style: none;
+            padding: 0;
+        }
+        .item{
+            height: 40px;
+            font-size: 20px;
+            padding-top: 10px;
+            box-sizing: border-box;
+        }
+        .item.yes{
+            color:#44ee44;
+        }
+        .item.no{
+            color:#ff4444;
+        }
+        .item.yes input{
+            color:#44ee44;
+        }
+        .item.no input{
+            color:#ff4444;
+        }
+        #msg{
+            display: none;
+            /* position:absolute; */
+            top:0;
+            bottom:0;
+            left:0;
+            right:0;
+            margin: auto;
+            background: rgba(255,255,255,.8);
+            /* width: 500px;
+            height: 400px; */
+            opacity: 0;
+            transition: all .5s;
+            border-radius: 20px;
+            padding: 10% 20px;
+            text-align: center;
+            box-sizing: border-box;
+            font-size: 30px;
+            /* box-shadow: 3px 3px 15px rgba(0,0,0,.2),0 0 100px 1000px rgba(0,0,0,.5); */
+        }
+        #msg.show{
+            display: block;
+            opacity: 1;
+        }
+        #msg .fs{
+            color:#ff6666;
+            font-size: 60px;
+            
+        }
+        .warp{
+            text-align: center;
+        }
+        .jg{
+            border: none;
+            border-bottom: 1px solid #bbb;
+            width: 50px;
+            background: transparent;
+            font-size: 20px;
+        }
+        .btn{
+            width: 200px;
+            height: 50px;
+            margin-top: 20px;
+            background: #2aa;
+            font-size: 20px;
+            line-height: 20px;
+            border-radius: 10px;
+            color: #eee;
+        }
+    </style>
+</head>
+
+<body>
+    <div class='warp'>
+        <div id='msg'></div>
+        <ul class='list'>
+          
+        </ul>
+        <input id='txtCount' type="text" placeholder='题目数量' style='display: none;' />
+        
+        <input id='submit' type="button" class='btn' value='我做完了' onClick='submit()'/>
+        
+    </div>
+    <script>
+        var count=document.querySelector('#txtCount')
+        var list =  document.querySelector('.list')
+        var msg =  document.querySelector('#msg')
+        var btnSubmit = document.getElementById('submit')
+        var btnBuild = document.getElementById('build')
+        
+
+        var opt={
+            total:100,//总分
+            count:10,//题目数量
+            max:50,//最大数字
+        }
+
+        window.onload=init
+        function init(){
+            count.value=opt.count
+            build()
+        }
+         //创建题目
+        function build(){
+            
+            list.innerHTML='';
+            msg.className=msg.className.replace(' show','')
+           
+            for(i=0;i<count.value;i++)
+            {
+                createItem()
+            }
+        }
+
+        function createItem(){
+            var item = document.createElement('li')
+            var c1=Math.floor(Math.random()*50)
+            var c2=Math.floor(Math.random()*50)
+            var op=Math.random()>0.5?'-':'+'
+            var strValue=''+c1+op+c2
+            item.innerHTML="<span class='tm' i-value='"+strValue+"'>"+strValue+"=</span><input class='jg' />"
+            item.className="item"
+            list.append(item)
+        }
+
+        function submit(){
+            var jgs=document.querySelectorAll('.jg')
+            for(var i=0;i<jgs.length;i++)
+            {
+                if(jgs[i].value.length<1)
+                {
+                    alert('还没有做完哦!')
+                    return
+                }
+            }
+           
+
+            var items =  document.querySelectorAll('.tm')
+            
+            for(var i=0;i<items.length;i++)
+            {
+                var isOk=eval(items[i].getAttribute("i-value"))==items[i].nextElementSibling.value
+                items[i].parentElement.className=isOk?'item yes':'item no'
+            }
+            
+            msgBox(opt.total/opt.count * document.querySelectorAll('.yes').length)
+        }
+
+        function msgBox(fs){
+            msg.className+=' show'
+            var tip='太棒了！！！'
+            if(90<=fs&&fs<100)
+                tip='就差一点，太可惜了，加油！'
+            else if(80<=fs&&fs<90)
+                tip='还要加油哦！'
+            else if(70<=fs&&fs<80)
+                tip='能不能用心点！'
+            else if(60<=fs&&fs<70)
+                tip='在不努力就完蛋了！'
+            else if(fs<60)
+                tip='等着被爸爸妈妈打屁股吧！！'
+            msg.innerHTML='<div class="fs">'+fs+'分</div><p>'+tip+'</p><input id="build" type="button" value="再来一次" class="btn" onClick="build()"/>'
+        }
+    </script>
+
+</body>
+
+</html>
